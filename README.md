@@ -15,10 +15,10 @@ The goal of this homework is to perform an experiment comparing two different dy
 ### Requirements
 
 * [Python](https://www.python.org/) >= 2.7.15
-* [NumPy](http://www.numpy.org/) >= 1.15.1
+* [NumPy](http://www.numpy.org/) >= 1.15.2
 * [SciPy](https://www.scipy.org/) >= 1.1.0
 * [pandas](https://pandas.pydata.org/) >= 0.23.4
-* [scikit-learn](http://scikit-learn.org/stable/) >= 0.19.2
+* [scikit-learn](http://scikit-learn.org/stable/) >= 0.20.0
 
 
 ### Installing
