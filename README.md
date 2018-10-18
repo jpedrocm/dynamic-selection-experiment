@@ -1,6 +1,6 @@
 # Homework 3
 
-![python](https://img.shields.io/badge/python-2.7-blue.svg)
+![python](https://img.shields.io/badge/python-3.7-blue.svg)
 ![status](https://img.shields.io/badge/status-in%20progress-yellow.svg)
 ![license](https://img.shields.io/badge/license-MIT-green.svg)
 
@@ -14,11 +14,12 @@ The goal of this homework is to perform an experiment comparing two different dy
 
 ### Requirements
 
-* [Python](https://www.python.org/) >= 2.7.15
+* [Python](https://www.python.org/) >= 3.7.0
 * [NumPy](http://www.numpy.org/) >= 1.15.2
 * [SciPy](https://www.scipy.org/) >= 1.1.0
 * [pandas](https://pandas.pydata.org/) >= 0.23.4
 * [scikit-learn](http://scikit-learn.org/stable/) >= 0.20.0
+* [DESlib](https://github.com/Menelau/DESlib) >= 0.2
 
 
 ### Installing
