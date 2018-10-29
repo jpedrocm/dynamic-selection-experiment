@@ -19,7 +19,7 @@ The goal of this homework is to perform an experiment comparing two different dy
 * [SciPy](https://www.scipy.org/) >= 1.1.0
 * [pandas](https://pandas.pydata.org/) >= 0.23.4
 * [scikit-learn](http://scikit-learn.org/stable/) >= 0.20.0
-* [DESlib](https://github.com/Menelau/DESlib) >= 0.2
+* [DESlib](https://github.com/Menelau/DESlib) >= 0.3.dev
 
 
 ### Installing
@@ -48,16 +48,16 @@ python compare_scenarios.py [-f FILENAME] [-s SEPARATE] [-c1 COLUMN1] [-c2 COLUM
 ## Project Structure
 
     .            
-    ├── code                             # Code files
-    |   ├── compare_scenarios.py         # Compare metric results 
-    │   ├── generate_metrics.py          # Generate metric results
-    │   ├── generate_predictions.py      # Generate models predictions
-    │   ├── prefit_voting_classifier.py  # Voting classifier for prefit base classifiers
-    │   └── utils.py                     # Utils functions
-    ├── comparisons                      # Result comparison files
-    ├── data                             # Datasets files
-    ├── metrics                          # Metrics files
-    ├── predictions                      # Models predictions files
+    ├── code                                  # Code files
+    |   ├── compare_scenarios.py              # Compare metric results 
+    │   ├── generate_metrics.py               # Generate metric results
+    │   ├── generate_predictions.py           # Generate models predictions
+    │   ├── two_stage_tiebreak_classifier.py  # Two stage ensemble based on instance hardness and tiebreaking rule
+    │   └── utils.py                          # Utils functions
+    ├── comparisons                           # Result comparison files
+    ├── data                                  # Datasets files
+    ├── metrics                               # Metrics files
+    ├── predictions                           # Models predictions files
     ├── LICENSE.md
     └── README.md
 
