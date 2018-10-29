@@ -45,7 +45,7 @@ if __name__ == "__main__":
 			dev_instances = instances.iloc[dev_idxs]
 			dev_gold_labels = gold_labels.iloc[dev_idxs]
 
-			dev_tuple = train_test_split(dev_idxs, test_size = 0.25, shuffle=True, 
+			dev_tuple = train_test_split(dev_idxs, test_size = 0.2223, shuffle=True, 
 				                         stratify=dev_gold_labels)
 
 			train_idxs = dev_tuple[0]
@@ -69,8 +69,8 @@ if __name__ == "__main__":
 				ds_clf = selection_func(pool_classifiers=clf_pool)
 				ds_clf.fit(validation_instances, validation_gold_labels)
 
-				cur_predictions = ds_clf.predict(test_instances).astype(int).tolist()
-				predictions[dataset_name][fold][strategy_name] = [cur_predictions, strategy_type]
+				cur_predictions = ds_clf.predict(test_instances).astype(int)
+				predictions[dataset_name][fold][strategy_name] = [cur_predictions.tolist(), strategy_type]
 
 				print("Experiment " + str(exp))
 				exp+=1
