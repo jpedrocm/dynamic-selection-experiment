@@ -35,7 +35,6 @@ class TSTBClassifier():
 		return new_k
 
 	def _create_hard_estimator_left(self):
-		#return self._create_knn(self.small_k, 'uniform')
 		return self._create_tiebreak_estimator(self.small_k)
 
 	def _create_tiebreak_estimator(self, k):
@@ -59,39 +58,44 @@ class TSTBClassifier():
 		self.hard_estimator_left.fit(X, y)
 		self.tiebreaking_estimator.fit(X, y)
 
-	def _get_IH(self, x, k, instance_label):
-		idxs = self.easy_estimator.kneighbors(X=[x], n_neighbors=k,
-		                                      return_distance=False)
-		neighbors_labels = [self.dsel_labels[i] for i in idxs[0]]
-		kdn = sum([l!=instance_label for l in neighbors_labels])
-		return kdn/float(k)
+	def _get_kdn(self, k_labels, instance_label):
+		return sum([l != instance_label for l in k_labels])
 
-	def _predict_hard_stage(self, x):
-		left_label = self.hard_estimator_left.predict([x])[0]
-		right_label = self.hard_estimator_right.predict([x])[0]
+	def _get_IHs(self, X, k, instance_labels):
+		idxs_matrix = self.easy_estimator.kneighbors(X=X, n_neighbors=k,
+		                                             return_distance=False)
 
+		neighbors_labels = [[self.dsel_labels[i] for i in idxs_matrix[j]] for j in range(len(idxs_matrix))]
+		kdns = [self._get_kdn(neighbors_labels[i], instance_labels[i]) for i in range(len(neighbors_labels))]
+		return np.array(kdns)/float(k)
+
+	def _predict_hard_stage(self, left_label, right_label, tb_label):
 		if left_label != right_label:
-			return self.tiebreaking_estimator.predict([x])[0]
+			return tb_label
 		else:
 			return left_label
 
-	def _two_stage_predict(self, x):
-		easy_label = self.easy_estimator.predict([x])[0]
-		easy_IH = self._get_IH(x, self.large_k, easy_label)
+	def _select_stage(self, x, ih, easy_label, left_label, right_label, tb_label):
+		return easy_label if ih <= self.IH_rate else self._predict_hard_stage(left_label, 
+			                                                                 right_label, 
+			                                                                 tb_label)
 
-		if easy_IH <= self.IH_rate:
-			return easy_label
-		else:
-			return self._predict_hard_stage(x)
+	def _two_stage_predict(self, X):
+		easy_labels = self.easy_estimator.predict(X)
+		IHs = self._get_IHs(X, self.large_k, easy_labels)
+		left_labels = self.hard_estimator_left.predict(X)
+		right_labels = self.hard_estimator_right.predict(X)
+		tb_labels = self.tiebreaking_estimator.predict(X)
 
+		return [self._select_stage(X[i], IHs[i], easy_labels[i], left_labels[i], 
+			                       right_labels[i], tb_labels[i]) for i in range(len(easy_labels))]
 
 	def predict(self, X):
-		
 		predictions = []
 
 		if self.with_IH == True:
-			predictions = [self._two_stage_predict(xi) for xi in X]
+			predictions = self._two_stage_predict(X)
 		else:
-			predictions = [self._predict_hard_stage(xi) for xi in X]
+			raise NotImplementedError()
 
 		return np.array(predictions)
