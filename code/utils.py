@@ -247,7 +247,7 @@ def write_comparison(dfs, focus_columns, filename):
 			outfile.write("Mean of metrics\n")
 			outfile.write(df_set.groupby(by=focus_columns).mean().to_string())
 			outfile.write("\n\nStd of metrics\n")
-			outfile.write(df_set.groupby(by=focus_columns).std().to_string())
+			outfile.write(df_set.groupby(by=focus_columns).std().fillna(0).to_string())
 			outfile.write("\n")
 			outfile.write("-------------------------------------------------")
 
