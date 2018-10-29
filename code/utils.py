@@ -14,7 +14,6 @@ from sklearn.linear_model import Perceptron
 from sklearn.ensemble import BaggingClassifier
 from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
 from sklearn.metrics import precision_score, recall_score
-from sklearn.metrics.pairwise import euclidean_distances
 
 from deslib.dcs import OLA, LCA
 from deslib.des import KNORAE, KNORAU
@@ -45,47 +44,13 @@ def _create_selection_strategies(k_competence):
 	return [("F-KNU", "DES", partial(KNORAU, DFP=True, k=k_competence)),
 	        ("F-KNE", "DES", partial(KNORAE, DFP=True, k=k_competence)),
 	        ("F-OLA", "DCS", partial(OLA, DFP=True, k=k_competence)),
-	        ("F-LCA", "DCS", partial(LCA, DFP=True, k=k_competence))]
-	        #("Two-Stage.0IH", "Hybrid", partial(TSTBClassifier, k=k_competence,
-	        #                                with_IH=True, IH_rate=0.0)),
-	        #("Two-Stage.2IH", "Hybrid", partial(TSTBClassifier, k=k_competence,
-	        #                                with_IH=True, IH_rate=0.2)),
-	        #("Two-Stage.4IH", "Hybrid", partial(TSTBClassifier, k=k_competence,
-	        #                                with_IH=True, IH_rate=0.4))] # [KNN] pra faceis : [Hard Voting(Weighted KNN + Ensemble) ELSE voto de minerva] pra dificeis
-
-def _get_error_vector(clf, instances, gold_labels):
-	predicted = clf.predict(instances)
-	return [predicted[i]==gold_labels[i] for i in range(len(gold_labels))]
-
-def _find_k_neighbours(distances, k):
-	
-	matrix_neighbours = []
-	for i in range(len(distances)):
-		
-		cur_neighbours = set()
-		while len(cur_neighbours) < k:
-			min_ix = np.argmin(distances[i])
-			distances[i, min_ix] = sys.float_info.max
-
-			if min_ix != i:
-				cur_neighbours.add(min_ix)
-
-		matrix_neighbours.append(list(cur_neighbours))
-
-	return matrix_neighbours
-
-def _calculate_kdn_hardness(instances, gold_labels, k):
-	distances = euclidean_distances(instances, instances)
-	neighbours = _find_k_neighbours(distances, k)
-
-	hards = []
-	for i in range(len(neighbours)):
-		fixed_label = gold_labels[i]
-		k_labels = gold_labels[neighbours[i]]
-		dn = sum(map(lambda label: label != fixed_label, k_labels))
-		hards.append(float(dn)/k)
-
-	return hards
+	        ("F-LCA", "DCS", partial(LCA, DFP=True, k=k_competence)),
+	        ("Two-Stage.0IH", "Hybrid", partial(TSTBClassifier, k=k_competence,
+	                                        with_IH=True, IH_rate=0.0)),
+	        ("Two-Stage.2IH", "Hybrid", partial(TSTBClassifier, k=k_competence,
+	                                        with_IH=True, IH_rate=0.2)),
+	        ("Two-Stage.4IH", "Hybrid", partial(TSTBClassifier, k=k_competence,
+	                                        with_IH=True, IH_rate=0.4))] # [KNN] pra faceis : [Hard Voting(Weighted KNN + Ensemble) ELSE voto de minerva] pra dificeis
 
 def scale_data(train_instances, validation_instances, test_instances):
 	scaler = StandardScaler()
